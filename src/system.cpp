@@ -3,11 +3,10 @@
 #include <set>
 #include <string>
 #include <vector>
-
+#include "linux_parser.h"
 #include "process.h"
 #include "processor.h"
 #include "system.h"
-#include "linux_parser.h"
 
 using std::set;
 using std::size_t;
@@ -21,8 +20,8 @@ Processor& System::Cpu() { return cpu; }
 vector<Process>& System::Processes() { 
    
   vector<int> pids;
-  pids=LinuxParser::Pids();
-  System::processes.clear();
+  pids = LinuxParser::Pids();
+  processes.clear();
   for(auto pid : pids)
   {
    processes.push_back(Process(pid));

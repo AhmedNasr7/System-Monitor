@@ -2,11 +2,12 @@
 #include <unistd.h>
 #include <string>
 #include <vector>
-#include <iostream>
 #include "linux_parser.h"
 
 using std::stof;
+using std::stoi;
 using std::stol;
+using std::stof;
 using std::string;
 using std::to_string;
 using std::vector;
@@ -116,12 +117,11 @@ long LinuxParser::UpTime() {
 
 
 // TODO: Read and return the number of active jiffies for a PID
-// REMOVE: [[maybe_unused]] once you define the function
 
 float LinuxParser::ActiveJiffies(int pid) { 
   string line, value;
   string utime, cutime, cstime, Stime;
-  long total;
+  long int total;
   float sec, cpu_usage;
   
   long uptime = LinuxParser::UpTime();
@@ -147,16 +147,12 @@ float LinuxParser::ActiveJiffies(int pid) {
     }
   
   total = stol(utime) + stol(Stime) + stol(cutime) + stol(cstime);
-  sec = uptime-(starttime / sysconf(_SC_CLK_TCK));
+  sec = uptime - (starttime / sysconf(_SC_CLK_TCK));
   cpu_usage = ((total / sysconf(_SC_CLK_TCK)) / sec) * 100;
   
   return cpu_usage; 
    
-
-  
 }
-
-
 
 // TODO: Read and return the number of active jiffies for the system
 //long LinuxParser::ActiveJiffies() { return 0; }
