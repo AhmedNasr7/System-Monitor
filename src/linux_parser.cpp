@@ -34,6 +34,8 @@ string LinuxParser::OperatingSystem() {
       }
     }
   }
+  filestream.close();
+
   return value;
 }
 
@@ -41,12 +43,13 @@ string LinuxParser::OperatingSystem() {
 string LinuxParser::Kernel() {
   string os, kernel, version;
   string line;
-  std::ifstream stream(kProcDirectory + kVersionFilename);
-  if (stream.is_open()) {
-    std::getline(stream, line);
+  std::ifstream fstream(kProcDirectory + kVersionFilename);
+  if (fstream.is_open()) {
+    std::getline(fstream, line);
     std::istringstream linestream(line);
     linestream >> os >> version >> kernel;
   }
+  fstream.close();
   return kernel;
 }
 
@@ -89,6 +92,7 @@ float LinuxParser::MemoryUtilization() {
   }
   }
   
+  filestream.close();
   mem_total = mem[0];
   mem_free = mem[1];
   
@@ -112,6 +116,7 @@ long LinuxParser::UpTime() {
     
   }
   
+  fstream.close();
   return uptime_l; 
 }
 
@@ -145,6 +150,7 @@ float LinuxParser::ActiveJiffies(int pid) {
    }
         
     }
+  filestream.close();
   
   total = stol(utime) + stol(Stime) + stol(cutime) + stol(cstime);
   sec = uptime - (starttime / sysconf(_SC_CLK_TCK));
@@ -187,6 +193,8 @@ vector<string> LinuxParser::CpuUtilization() {
     
   }
 
+  fstream.close();
+
   return values; 
 }
 
@@ -206,6 +214,7 @@ int LinuxParser::TotalProcesses() {
     }
     
   }
+  filestream.close();
   return stoi(value); 
 }
 
@@ -226,6 +235,7 @@ int LinuxParser::RunningProcesses() {
     }
     
   }
+  filestream.close();
   return stoi(value); 
 
 }
@@ -243,6 +253,9 @@ string LinuxParser::Command(int pid) {
       std::istringstream sstream(line);
       sstream >> cmd;       
   }
+
+  filestream.close();
+
   return cmd; 
  }
 
@@ -264,6 +277,8 @@ string LinuxParser::Ram(int pid)
     }
     
   }
+
+  filestream.close();
   return value; 
 
 }
@@ -288,7 +303,10 @@ string LinuxParser::Uid(int pid) {
     }
     
   }
-     return "-1";                             
+
+  filestream.close();
+
+  return "-1";                             
   }
 
 // TODO: Read and return the user associated with a process
@@ -308,6 +326,7 @@ string LinuxParser::User(int pid) {
       }
     }
    }
+fstream.close();
 return "-1";
 }
 
@@ -330,5 +349,6 @@ long LinuxParser::UpTime(int pid) {
     }
      
   }
+  filestream.close();
   return (stol(value) / sysconf(_SC_CLK_TCK));
 }
