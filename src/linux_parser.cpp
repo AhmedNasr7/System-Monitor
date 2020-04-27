@@ -154,7 +154,7 @@ float LinuxParser::ActiveJiffies(int pid) {
   
   total = stol(utime) + stol(Stime) + stol(cutime) + stol(cstime);
   sec = uptime - (starttime / sysconf(_SC_CLK_TCK));
-  cpu_usage = ((total / sysconf(_SC_CLK_TCK)) / sec) * 100;
+  cpu_usage = ((total / sysconf(_SC_CLK_TCK)) / sec);
   
   return cpu_usage; 
    
