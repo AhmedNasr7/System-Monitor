@@ -13,8 +13,7 @@ using std::to_string;
 using std::vector;
 
 
-//using namespace std;
-// DONE: An example of how to read data from the filesystem
+// An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem() {
   string line;
   string key;
@@ -73,7 +72,7 @@ vector<int> LinuxParser::Pids() {
   return pids;
 }
 
-// TODO: Read and return the system memory utilization
+// Read and return the system memory utilization
 float LinuxParser::MemoryUtilization() { 
   	
   string line, key, value;
@@ -100,7 +99,7 @@ float LinuxParser::MemoryUtilization() {
   return (float) (mem_total - mem_free) / mem_total; 
 }
 
-// TODO: Read and return the system uptime
+// Read and return the system uptime
 long LinuxParser::UpTime() { 
   
   string line, uptime, idletime;
@@ -121,17 +120,13 @@ long LinuxParser::UpTime() {
 }
 
 
-// TODO: Read and return the number of active jiffies for a PID
 
 float LinuxParser::ActiveJiffies(int pid) { 
   string line, value;
   string utime, cutime, cstime, Stime;
   long int total;
-  float sec, cpu_usage;
-  
-  long uptime = LinuxParser::UpTime();
-  long starttime = UpTime(pid);
-  
+  float sec, cpu_usage;  
+
   
   std::ifstream filestream(kProcDirectory + to_string(pid) + kStatFilename);
   if (filestream.is_open())
@@ -153,20 +148,16 @@ float LinuxParser::ActiveJiffies(int pid) {
   filestream.close();
   
   total = stol(utime) + stol(Stime) + stol(cutime) + stol(cstime);
-  sec = uptime - (starttime / sysconf(_SC_CLK_TCK));
+  sec = UpTime(pid);
   cpu_usage = ((total / sysconf(_SC_CLK_TCK)) / sec);
   
   return cpu_usage; 
    
 }
 
-// TODO: Read and return the number of active jiffies for the system
-//long LinuxParser::ActiveJiffies() { return 0; }
 
-// TODO: Read and return the number of idle jiffies for the system
-//long LinuxParser::IdleJiffies() { return 0; }
 
-// TODO: Read and return CPU utilization
+// Read and return CPU utilization
 vector<string> LinuxParser::CpuUtilization() { 
   vector<string>values;
   string value, line;
@@ -198,7 +189,7 @@ vector<string> LinuxParser::CpuUtilization() {
   return values; 
 }
 
-// TODO: Read and return the total number of processes
+// Read and return the total number of processes
 int LinuxParser::TotalProcesses() {
   string line, key, value;
   
@@ -218,8 +209,7 @@ int LinuxParser::TotalProcesses() {
   return stoi(value); 
 }
 
-// TODO: Read and return the number of running processes
-
+// Read and return the number of running processes
 int LinuxParser::RunningProcesses() {
   string line, key, value;
   
@@ -240,8 +230,7 @@ int LinuxParser::RunningProcesses() {
 
 }
 
-// TODO: Read and return the command associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
+// Read and return the command associated with a process
 string LinuxParser::Command(int pid) { 
   
   string line, cmd;
@@ -259,8 +248,7 @@ string LinuxParser::Command(int pid) {
   return cmd; 
  }
 
-// TODO: Read and return the memory used by a process
-// REMOVE: [[maybe_unused]] once you define the function
+// Read and return the memory used by a process
 string LinuxParser::Ram(int pid)
 { 
 	string line, key, value;
@@ -283,8 +271,7 @@ string LinuxParser::Ram(int pid)
 
 }
 
-// TODO: Read and return the user ID associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
+// Read and return the user ID associated with a process
 string LinuxParser::Uid(int pid) { 
   string line, key, value;
   
@@ -309,8 +296,7 @@ string LinuxParser::Uid(int pid) {
   return "-1";                             
   }
 
-// TODO: Read and return the user associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
+// Read and return the user associated with a process
 string LinuxParser::User(int pid) { 
   
   
@@ -330,8 +316,7 @@ fstream.close();
 return "-1";
 }
 
-// TODO: Read and return the uptime of a process
-// REMOVE: [[maybe_unused]] once you define the function
+// Read and return the uptime of a process
 long LinuxParser::UpTime(int pid) { 
   
   string line, key, value;
@@ -350,5 +335,5 @@ long LinuxParser::UpTime(int pid) {
      
   }
   filestream.close();
-  return (stol(value) / sysconf(_SC_CLK_TCK));
+  return UpTime() - (stol(value) / sysconf(_SC_CLK_TCK));
 }
